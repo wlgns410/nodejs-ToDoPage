@@ -1,6 +1,9 @@
 // 설치한 라이브러리를 호출
-const express = require('express')
+const express = require('express');
 const app = express();
+const bodyParser= require('body-parser')
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(express.urlencoded({extended: true}));
 
 // 로컬 컴퓨터에 서버를 염(포트번호, 할 기능)
 app.listen(8080, function(){
@@ -21,3 +24,18 @@ app.get('/beauty', function(req, res){
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html')
 });
+
+app.get('/write', function(req, res){
+    res.sendFile(__dirname + '/write.html')
+})
+
+// es6 문법
+// app.get('/write', (req, res) => {
+//     res.sendFile(__dirname + '/write.html')
+// })
+
+app.post('/add', function(req, res){
+    res.send('저장 완료');
+    console.log(req.body.date);
+    console.log(req.body.title);
+})
