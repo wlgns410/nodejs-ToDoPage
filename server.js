@@ -52,6 +52,16 @@ app.post('/add', function(req, res){
     
 });
 
+app.delete('/delete', function(req, res){
+    console.log(req.body);
+    // 정수로 변환 parseInt
+    req.body._id = parseInt(req.body._id);
+    //요청.body에 담긴 게시물번호를 db.Post에서 삭제
+    db.collection('post').deleteOne(req.body, function(err, result){
+        console.log('삭제 완료');
+        res.status(200).send({ message : '삭제 성공'});
+    });
+});
 
 //list로 GET요청 시 실제 DB에 저장된 데이터들로 예쁘게 꾸며진HTML을 보여줌
 

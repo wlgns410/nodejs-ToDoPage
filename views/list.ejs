@@ -46,19 +46,55 @@
       </form>
 
 
-    <!-- 반복문 :서버에서 가져온 할 일 리스트 가져오기 posts.length : 데이터의 개수를 알려주기 위함-->
-    <% for (var i = 0; i < posts.length; i++){ %>
-        <h2>할 일 제목 : <%=  posts[i].title %></h2>
-        <h2>날 짜 : <%= posts[i].date %></h2>
-    <% } %>
+    <!-- 반복문 :서버에서 가져온 할 일 리스트 가져오기 posts.length : 데이터의 개수를 알려주기 위함
+    delete put은 html에서 안됨 따라서 라이브러리나 ajax 사용-->
+    <ul class="list-group">
+        <% for (var i = 0; i < posts.length; i++){ %>
+        <li class="list-group-item">
+            <p>글 번호 : <%= posts[i]._id %></p>
+            <h4> 할일 제목 : <%= posts[i].title %> </h4>
+            <p> 할일 마감날짜 : <%= posts[i].date %> </p>
+            <button class="delete" data-id="<%= posts[i]._id %>">삭제</button>
+        </li>
+        <% } %>
+    </ul>
+    
+    <!-- <div class="list-group">
+        <% for (var i = 0; i < posts.length ; i++){ %>
+        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+          The current link item
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">A second link item</a>
+        <a href="#" class="list-group-item list-group-item-action">A third link item</a>
+        <a href="#" class="list-group-item list-group-item-action">A fourth link item</a>
+        <a href="#" class="list-group-item list-group-item-action disabled" tabindex="-1" aria-disabled="true">A disabled link item</a>
+        <% } %>
+    </div> -->
 
-    <!--
-    <h2>할 일 제목 : <%=  posts[1].title %></h2>
-    <h2>날 짜 : <%= posts[1].date %></h2>
+    <!-- ajax : 서버에 요청하는 것을 도와주는 jquery 문법 / done : 성공 시 할 행동-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
 
-    <h2>할 일 제목 : <%=  posts[2].title %></h2>
-    <h2>날 짜 : <%= posts[2].date %></h2>
-    -->
+        $('.delete').click(function(e){
+            var postNum = e.target.dataset.id; //내가 누른 요소의 data-id / e.target : 지금 클릭한 것
+            var push = $(this); // 내가 지금 클릭한 것 this : 이벤트 동작하는 곳
+            $.ajax({
+            method : 'DELETE',
+            url : '/delete',
+            data : {_id : postNum}
+            }).done(function(result){ 
+                //  페이지를 강제로 새로고침하면서 삭제버튼을 누른 <li> 요소도 안보이게 하기 위함
+              console.log('성공');
+              push.parent('li').fadeOut(); //li 부모요서를 사라지게만듦
+            }).fail(function(xhr, textStatus, errorThrown){
+                console.log(xhr, textStatus, errorThrown);
+            });
+        });
+
+    </script>
+
+
+    
 
     <!-- Optional JavaScript; choose one of the two! -->
 
