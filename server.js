@@ -98,4 +98,12 @@ app.get('/list', function(req, res){
     });
 });
 
-// 글 번호를 달아서 저장
+// /detail로 접속하면 detail.ejs 보여줌
+// /detail2로 접속하면 detail2.ejs 보여줌
+// ':' 뒤에 파라미터가 있으면, 그 페이지로 보내주세요, req.params.id : 요청의 파라미터.something을 가져와라. 
+app.get('/detail/:id', function(req, res){
+    db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err, result){
+        console.log(result);
+        res.render('detail.ejs', {data : result});
+    });
+});
