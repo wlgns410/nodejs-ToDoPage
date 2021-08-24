@@ -6,6 +6,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.urlencoded({extended: true}));
 const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs');
+app.use('/public', express.static('public'));
 
 // 어떤 데이터 베이스에 저장할 것인지
 var db;
@@ -81,14 +82,29 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html')
 });
 
-app.get('/write', function(req, res){
-    res.sendFile(__dirname + '/write.html')
-});
+// app.get('/write', function(req, res){
+//     res.sendFile(__dirname + '/write.html')
+// });
 
 // es6 문법
 // app.get('/write', (req, res) => {
 //     res.sendFile(__dirname + '/write.html')
 // })
+app.get('/index', function(req, res){
+    db.collection('post').find().toArray(function(err, result){
+        console.log(result);
+        res.render('index.ejs', {post : result});
+    });
+});
+
+app.get('/write', function(req, res){
+    db.collection('post').find().toArray(function(err, result){
+        console.log(result);
+        res.render('write.ejs', {post : result});
+    });
+});
+
+
 
 app.get('/list', function(req, res){
     // find : 모든 데이터 가져옴
@@ -104,6 +120,7 @@ app.get('/list', function(req, res){
 app.get('/detail/:id', function(req, res){
     db.collection('post').findOne({_id : parseInt(req.params.id)}, function(err, result){
         console.log(result);
+        if(err) {return res.status(404).send('요청 페이지 없음')};
         res.render('detail.ejs', {data : result});
     });
 });

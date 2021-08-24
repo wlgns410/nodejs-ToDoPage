@@ -8,6 +8,10 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
 
+
+    <link rel="stylesheet" href="/public/main.css">
+    <%- include('nav.html') %>
+
     <title>Hello, world!</title>
   </head>
   <body>
@@ -32,12 +36,18 @@
           </div>
         </div>
       </nav>
-      <h4>상세 페이지</h4>
-      <h4>제목 : 7번 게시물의 <%= data.title %></h4>
-      <h4>날짜 : 7번 게시물의 <%= data.date %></h4>
- 
-
-    
+      
+    <div class="container mt-4">
+        <h4 class="text-center">상세 페이지</h4>
+        <div class="card" style="width: 100%">
+          <div class="card-body">
+            <h5 class="card-title"><%= data.title %></h5>
+            <h6 class="card-subtitle mb-2 text-muted"><%= data.date %></h6>
+            <p class="card-text">임시내용입니다.</p>
+            <a href="#" class="card-link">수정하기</a>
+          </div>
+        </div>
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
