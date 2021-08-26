@@ -138,7 +138,42 @@ app.get('/edit/:id', function(req, res){
 // Put method
 app.put('/edit', function(req, res){
     db.collection('post').updateOne({_id : parseInt(req.params.id)}, {$set : {title: req.body.title, date: req.body.date}}, function(err, result){
-        console.log('수정 완료');
+        console.log('수정 성공');
         res.redirect('/list');
     });
+});
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const session = require('express-session');
+
+app.use(session({secret : '비밀코드', resave : true, saveUninitialized : false}));
+app.use(passport.initialize());
+app.use(passport.session()); // app.use(미들웨어) 미들웨어 : 요청-응답 사이에 있는 것
+
+app.get('/login', function(req, res){
+    res.render('login.ejs')
+});
+app.post('/login', passport.authenticate('local', {
+    failureRedirect : '/fail'
+}), function(req, res){
+    res.redirect('/')
+});
+
+passport.use(new LocalStrategy({
+    usernameField: 'id',
+    passwordField: 'pw',
+    session: true,
+    passReqToCallback: false,
+}), function (user_id, user_pw, done) {
+    //console.log(입력한아이디, 입력한비번);
+    db.collection('login').findOne({ id: user_id }, function (err, result) {
+      if (err) return done(err)
+      if (!result) return done(null, false, { message: '존재하지않는 아이디요' })
+      if (user_pw == result.pw) {
+        return done(null, result)
+      } else {
+        return done(null, false, { message: '비번틀렸어요' })
+      }
+    })
 });
